@@ -42,3 +42,29 @@ sns.heatmap(dataset.corr(), ax=ax, cmap=cmap, vmin=0, vmax=1, center=0,
             square=True, linewidths=.5, cbar_kws={"shrink": .5}, annot=True)
 plt.savefig("../Grafiques/heatmap/mapa-calor.png")
 
+'''Calculem la desviació estandar de cada atribut'''
+desviacions = np.std(dataset1,axis=0)
+with open("../Estadistiques/desviacions.txt",'w') as d:
+    for i, des in enumerate(desviacions):
+        d.write("Atributo " + str(i+1) + " : " + str(des) + "\n")
+        d.write("----------------------------\n")
+        
+
+'''Apliquem un test de normalitat (el de Shapiro) a cadascuna de les variables per determinar 
+quines ens seran utils (segueixen una distribuicio normal)'''
+resultats = []
+for i in range(x.shape[1]):
+    resultats.append(scipy.stats.shapiro(x[:,i]))
+resultats = np.array(resultats)
+    
+with open("../Estadistiques/testNormalitat.txt",'w') as f:
+    f.write(" - TEST DE SHAPIRO - \n")
+    f.write("---------------------\n")
+    for k, res in enumerate(resultats):
+        f.write("Atributo " + str(k+1) + " : Estadistico: " + str(res[0]) + "   |   P-Valor: " + str(res[1]) + "\n")
+        if res[1] < 0.05:
+            f.write("Se puede rechazar la hipotesis de que los datos de distribuyen de forma normal\n")
+        else:
+            f.write("No se puede rechazar la hipotesis de que los datos de distribuyen de forma normal\n")
+        f.write("-----------------------------------------------------------------------------\n")
+
