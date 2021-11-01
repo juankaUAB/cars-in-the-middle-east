@@ -20,6 +20,15 @@ scaler = MinMaxScaler()
 scaler.fit(dataset1)
 dataset1 = scaler.transform(dataset1)
 
+'''Grafic de caixes'''
+caixes = dataset1[:,[17,19]]
+paisos = np.unique(caixes[:,1])
+caixa = []
+for i in paisos:
+    caixa.append([x[0] for x in caixes if x[1] == i])
+plt.boxplot(caixa)
+plt.savefig("../Grafiques/box/diagrama-caixes.png")
+
 idsx.pop(19)
 y = dataset1[:,17]
 x = dataset1[:,idsx]
