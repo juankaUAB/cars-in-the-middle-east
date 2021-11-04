@@ -1,13 +1,18 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-from sklearn.preprocessing import normalize, MinMaxScaler
+from sklearn.preprocessing import MinMaxScaler
 import scipy
 import seaborn as sns
+
+titols = ["Engine Capacity","Cylinders","Drive Type","Tank Capacity", "Fuel Economy","Fuel Type","Horsepower","Torque","Transmission","Top Speed","Seating Capacity","Acceleration","Length","Width","Height","Wheelbase","Trunk Capacity","Currency","Country"]
 
 dataset = pd.read_csv("../BD/dataframe_YesIndex_YesHeader_C.csv")
 dataset = dataset.drop(columns=["Unnamed: 0"])
 dataset = dataset.drop_duplicates()
+
+'''Prova de que el mateix cotxe existeix en paisos diferents'''
+print(dataset[dataset["name"] == "Mitsubishi Attrage 2021 1.2 GLX (Base)"])
 
 print("Hi han valors NaN a la base de dades? " + str(dataset.isnull().values.any()))
 
@@ -20,15 +25,6 @@ scaler = MinMaxScaler()
 scaler.fit(dataset1)
 dataset1 = scaler.transform(dataset1)
 
-'''Grafic de caixes'''
-caixes = dataset1[:,[17,19]]
-paisos = np.unique(caixes[:,1])
-caixa = []
-for i in paisos:
-    caixa.append([x[0] for x in caixes if x[1] == i])
-plt.boxplot(caixa)
-plt.savefig("../Grafiques/box/diagrama-caixes.png")
-
 idsx.pop(19)
 y = dataset1[:,17]
 x = dataset1[:,idsx]
@@ -36,14 +32,17 @@ x = dataset1[:,idsx]
 
 '''Generar grafiques'''
 for i in range(x.shape[1]):
-        plt.scatter(x[:,i], y)
-        plt.savefig("../Grafiques/disp/" + str(i) + ".png")
-        plt.clf()
-        density = scipy.stats.gaussian_kde(x[:,i])
-        n, xi, _ = plt.hist(x[:,i], density=True)
-        plt.plot(xi, density(xi))
-        plt.savefig("../Grafiques/hist/" + str(i) + ".png")
-        plt.clf()
+        if i != 19:
+            plt.xlabel(titols[i])
+            plt.ylabel("Price")
+            plt.scatter(x[:,i], y)
+            plt.savefig("../Grafiques/disp/" + str(i) + ".png")
+            plt.clf()
+            density = scipy.stats.gaussian_kde(x[:,i])
+            n, xi, _ = plt.hist(x[:,i], density=True)
+            plt.plot(xi, density(xi))
+            plt.savefig("../Grafiques/hist/" + str(i) + ".png")
+            plt.clf()
 
 fig, ax = plt.subplots(figsize=(20,20))
 cmap = sns.diverging_palette(220, 10, as_cmap=True)
@@ -76,4 +75,9 @@ with open("../Estadistiques/testNormalitat.txt",'w') as f:
         else:
             f.write("No se puede rechazar la hipotesis de que los datos de distribuyen de forma normal\n")
         f.write("-----------------------------------------------------------------------------\n")
+        
+'''Diagrama de barres'''
+fig, ax = plt.subplots(figsize=(10,10))
+ax = sns.barplot(x="Country", y="price", data=dataset[["price","Country"]],palette='pastel')
+plt.savefig("../Grafiques/bar/diagrama-barres.png")
 
