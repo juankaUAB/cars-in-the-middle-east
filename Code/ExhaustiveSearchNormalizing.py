@@ -3,6 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import scipy
 import seaborn as sns
+from sklearn.preprocessing import MinMaxScaler
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
@@ -10,13 +11,16 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import GridSearchCV
 from sklearn.model_selection import RandomizedSearchCV
 
-
 dataset = pd.read_csv("../BD/dataframe_YesIndex_YesHeader_C.csv")
 dataset = dataset.drop(columns=["Unnamed: 0"])
 dataset = dataset.drop_duplicates()
 dataset = dataset[["Torque","Cylinders","Horsepower","Top Speed","Engine Capacity","price"]]
 
+'''Adaptar les dades (normalitzar)'''
 dataset1 = dataset.values
+scaler = MinMaxScaler()
+scaler.fit(dataset1)
+dataset1 = scaler.transform(dataset1)
 
 x = dataset1[:,:5]
 y = dataset1[:,5]
@@ -77,4 +81,3 @@ randomCV.fit(X_train, y_train)
 print("----Random Forest----")
 print("Els millors parametres: " + str(randomCV.best_params_))
 print("La millor score: " + str(randomCV.best_score_))
-
