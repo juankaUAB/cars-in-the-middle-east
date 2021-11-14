@@ -10,6 +10,7 @@ from sklearn.linear_model import LinearRegression
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import GridSearchCV
 from sklearn.model_selection import RandomizedSearchCV
+from sklearn.metrics import mean_squared_error
 
 dataset = pd.read_csv("../BD/dataframe_YesIndex_YesHeader_C.csv")
 dataset = dataset.drop(columns=["Unnamed: 0"])
@@ -43,11 +44,13 @@ parametres = [{'fit_intercept': [True, False], 'normalize': [True,False]},
 
 resum = []
 for i, model in enumerate(models):
+    print("----" + str(nombres_models[i]) + "----")
+    print("")
     clf = GridSearchCV(estimator=model, param_grid=parametres[i], cv=3, verbose=2, n_jobs=-1)
     resum.append(clf.fit(X_train, y_train))
-    print("----" + str(nombres_models[i]) + "----")
     print("Els millors parametres" + str(resum[i].best_params_))
     print("La millor score: " + str(resum[i].best_score_))
+    print("Error quadratic mitja: " + str(mean_squared_error(y_test,clf.predict(X_test))))
     
     
 '''CERCA EXHAUSTIVA PER EL RANDOM FOREST'''
@@ -81,3 +84,5 @@ randomCV.fit(X_train, y_train)
 print("----Random Forest----")
 print("Els millors parametres: " + str(randomCV.best_params_))
 print("La millor score: " + str(randomCV.best_score_))
+print("Error quadratic mitja: " + str(mean_squared_error(y_test,randomCV.predict(X_test))))
+print("")
