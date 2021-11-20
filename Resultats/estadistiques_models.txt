@@ -1,0 +1,11 @@
+----REGRESSIO LINEAL----
+Score del model: 0.2109561848947339
+Error quadratic mitja: 0.0013321540248318617
+---- DECISION TREE----
+Profunditat del arbre: 24
+Numero de fulles del arbre: 809
+Score del model: 0.3156445077445662
+Error quadratic mitja: 0.0011554072232379654
+---- RANDOM FOREST REGRESSOR ----
+Score del model: 0.4250472296853711
+Error quadratic mitja: 0.0009707010338338179

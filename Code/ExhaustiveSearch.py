@@ -10,6 +10,7 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import GridSearchCV
 from sklearn.model_selection import RandomizedSearchCV
 from sklearn.metrics import mean_squared_error
+import math
 
 
 dataset = pd.read_csv("../BD/dataframe_YesIndex_YesHeader_C.csv")
@@ -42,11 +43,11 @@ resum = []
 for i, model in enumerate(models):
     print("----" + str(nombres_models[i]) + "----")
     print("")
-    clf = GridSearchCV(estimator=model, param_grid=parametres[i], cv=3, verbose=2, n_jobs=-1)
+    clf = GridSearchCV(estimator=model, param_grid=parametres[i], cv=3, verbose=3, n_jobs=-1)
     resum.append(clf.fit(X_train, y_train))
     print("Els millors parametres" + str(resum[i].best_params_))
     print("La millor score: " + str(resum[i].best_score_))
-    print("Error quadratic mitja: " + str(mean_squared_error(y_test,clf.predict(X_test))))
+    print("Error quadratic mitja: " + str(math.sqrt(mean_squared_error(y_test,clf.predict(X_test)))))
     print("")
     
     
@@ -77,10 +78,10 @@ random_grid = {'n_estimators': n_estimators,
 print("----Random Forest----")
 random_tree = RandomForestRegressor()
 randomCV = RandomizedSearchCV(estimator = random_tree, param_distributions = random_grid, 
-                              n_iter = 100, cv = 3, verbose=2, random_state=42, n_jobs = -1)
+                              n_iter = 100, cv = 3, verbose=3, random_state=42, n_jobs = -1)
 randomCV.fit(X_train, y_train)
 print("Els millors parametres: " + str(randomCV.best_params_))
 print("La millor score: " + str(randomCV.best_score_))
-print("Error quadratic mitja: " + str(mean_squared_error(y_test,randomCV.predict(X_test))))
+print("Error quadratic mitja: " + str(math.sqrt(mean_squared_error(y_test,randomCV.predict(X_test)))))
 print("")
 

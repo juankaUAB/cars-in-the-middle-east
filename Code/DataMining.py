@@ -6,10 +6,12 @@ import scipy
 import seaborn as sns
 
 titols = ["Engine Capacity","Cylinders","Drive Type","Tank Capacity", "Fuel Economy","Fuel Type","Horsepower","Torque","Transmission","Top Speed","Seating Capacity","Acceleration","Length","Width","Height","Wheelbase","Trunk Capacity","Currency","Country"]
-
+equivalencies = {'0': 0.23, '1': 0.24, '5': 2.32, '3': 2.89, '4': 2.27, '2': 0.24}
 dataset = pd.read_csv("../BD/dataframe_YesIndex_YesHeader_C.csv")
 dataset = dataset.drop(columns=["Unnamed: 0"])
 dataset = dataset.drop_duplicates()
+
+dataset1 = pd.read_csv("../BD/Original_raw_YesIndex_YesHeader.csv")
 
 '''Prova de que el mateix cotxe existeix en paisos diferents'''
 print(dataset[dataset["name"] == "Mitsubishi Attrage 2021 1.2 GLX (Base)"])

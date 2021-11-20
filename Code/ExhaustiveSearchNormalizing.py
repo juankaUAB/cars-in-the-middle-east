@@ -11,6 +11,7 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import GridSearchCV
 from sklearn.model_selection import RandomizedSearchCV
 from sklearn.metrics import mean_squared_error
+import math
 
 dataset = pd.read_csv("../BD/dataframe_YesIndex_YesHeader_C.csv")
 dataset = dataset.drop(columns=["Unnamed: 0"])
@@ -19,7 +20,7 @@ dataset = dataset[["Torque","Cylinders","Horsepower","Top Speed","Engine Capacit
 
 '''Adaptar les dades (normalitzar)'''
 dataset1 = dataset.values
-scaler = MinMaxScaler()
+scaler = MinMaxScaler(feature_range=(-1,1))
 scaler.fit(dataset1)
 dataset1 = scaler.transform(dataset1)
 
@@ -33,7 +34,7 @@ X_train, X_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_
 '''COMENÇEM LA CERCA EXHAUSTIVA DELS MILLORS PARAMETRES'''
 models = [LinearRegression(), DecisionTreeRegressor()]
 nombres_models = ["Linear Regression", "Decision Tree"]
-parametres = [{'fit_intercept': [True, False], 'normalize': [True,False]},
+parametres = [{'fit_intercept': [True, False]},
               {"splitter":["best","random"],
             "max_depth" : [1,3,5,10,15,25,30,50],
             "min_weight_fraction_leaf":[0.0,0.1,0.2,0.3,0.4,0.5],
@@ -48,9 +49,10 @@ for i, model in enumerate(models):
     print("")
     clf = GridSearchCV(estimator=model, param_grid=parametres[i], cv=3, verbose=2, n_jobs=-1)
     resum.append(clf.fit(X_train, y_train))
-    print("Els millors parametres" + str(resum[i].best_params_))
+    print("Els millors parametres: " + str(resum[i].best_params_))
     print("La millor score: " + str(resum[i].best_score_))
-    print("Error quadratic mitja: " + str(mean_squared_error(y_test,clf.predict(X_test))))
+    print("Error quadratic mitja: " + str(math.sqrt(mean_squared_error(y_test,clf.predict(X_test)))))
+    print("")
     
     
 '''CERCA EXHAUSTIVA PER EL RANDOM FOREST'''
@@ -84,5 +86,5 @@ randomCV.fit(X_train, y_train)
 print("----Random Forest----")
 print("Els millors parametres: " + str(randomCV.best_params_))
 print("La millor score: " + str(randomCV.best_score_))
-print("Error quadratic mitja: " + str(mean_squared_error(y_test,randomCV.predict(X_test))))
+print("Error quadratic mitja: " + str(math.sqrt(mean_squared_error(y_test,randomCV.predict(X_test)))))
 print("")

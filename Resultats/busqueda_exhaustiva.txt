@@ -1,0 +1,19 @@
+----Linear Regression----
+
+Fitting 3 folds for each of 2 candidates, totalling 6 fits
+Els millors parametres: {'fit_intercept': True}
+La millor score: 0.24825183777308754
+Error quadratic mitja: 0.07299737049598058
+
+----Decision Tree----
+
+Fitting 3 folds for each of 3072 candidates, totalling 9216 fits
+Els millors parametres: {'max_depth': 15, 'max_features': 'auto', 'max_leaf_nodes': 20, 'min_weight_fraction_leaf': 0.0, 'splitter': 'random'}
+La millor score: 0.6158506729798954
+Error quadratic mitja: 0.06813851402949354
+
+Fitting 3 folds for each of 100 candidates, totalling 300 fits
+----Random Forest----
+Els millors parametres: {'n_estimators': 2000, 'min_samples_split': 10, 'min_samples_leaf': 1, 'max_features': 'sqrt', 'max_depth': 10, 'bootstrap': False}
+La millor score: 0.5819945409553856
+Error quadratic mitja: 0.06748406209395516
